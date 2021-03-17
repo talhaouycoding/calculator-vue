@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="result">{{result}}</div>
-    <div class="btn">C</div>
-    <div class="btn">()</div>
+    <div class="result">{{ result === "" ? 0 : result }}</div>
+    <div class="btn" @click="clear">C</div>
+    <div class="btn" @click="minusPlus">+/-</div>
     <div class="btn" @click="append('%')">%</div>
     <div class="btn" @click="append('/')">/</div>
     <div class="btn" @click="append('7')">7</div>
@@ -17,10 +17,9 @@
     <div class="btn" @click="append('2')">2</div>
     <div class="btn" @click="append('3')">3</div>
     <div class="btn" @click="append('+')">+</div>
-    <div class="btn">+/-</div>
     <div class="btn" @click="append('0')">0</div>
-    <div class="btn" @click="append('.')">.</div>
-    <div class="btn equal" @click="equal"> = </div>
+    <div class="btn" @click="comma">.</div>
+    <div class="btn equal" @click="equal">=</div>
   </div>
 </template>
 
@@ -29,31 +28,62 @@ export default {
   name: "Calculator",
   data() {
     return {
-        result: '0',
-        operator: '',
-        secondNumber: '',
-        operators:['+','-','/','%','x']
-    }
+      result: '',
+      operator: '',
+      firstNumber: '',
+      secondNumber: '',
+      operators: ["+", "-", "/", "%", "x"],
+    };
   },
-  methods:{
-      append(value){
-          if(!this.operators.includes(value)){
-              this.result +=value
-          }else if(this.operators.includes(value) && this.result !== ''){
-              this.operator = value
-              this.secondNumber = this.result
-          }
-            //comma test
-       if(this.result.indexOf('.') !== -1 && value === '.'){
-           this.result += '.';
-       }
-
-         
-      },
-      equal(){
-
+  methods: {
+    append(value) {
+      if (!this.operators.includes(value)) {
+        this.result += value;
+      } else if (this.operators.includes(value) && this.result !== "") {
+        this.operator = value;
+        this.firstNumber = this.result;
+        this.result = "";
       }
-  }
+    },
+    equal() {
+      this.secondNumber = this.result;
+      switch (this.operator) {
+        case "+":
+          this.result = +this.firstNumber + +this.secondNumber;
+          break;
+        case "-":
+          this.result = +this.firstNumber - +this.secondNumber;
+          break;
+        case "x":
+          this.result = +this.firstNumber * +this.secondNumber;
+          break;
+        case "/":
+          if (this.secondNumber === "0") {
+            this.result = "divide by zero";
+          } else {
+            this.result = +this.firstNumber / +this.secondNumber;
+          }
+
+          break;
+        case "%":
+          this.result = +this.firstNumber % +this.secondNumber;
+          break;
+      }
+    },
+    comma() {
+      if (this.result.indexOf(".") === -1 && this.result.length > 0) {
+        this.result += ".";
+      }
+    },
+    clear() {
+      this.result = "";
+    },
+    minusPlus() {
+      if (+this.result[0] !== "-") {
+        this.result = -+this.result;
+      }
+    },
+  },
 };
 </script>
 
@@ -69,14 +99,17 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #333;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 500;
   color: #fff;
+  transition: background 0.5s ease-in-out;
 }
-.btn:hover{
-    cursor:pointer;
+.btn:hover {
+  cursor: pointer;
+  background-color: rgba(116, 179, 201, 0.5);
+  border-radius: 5px;
 }
+
 .result {
   grid-column: 1/-1;
   padding: 20px;
@@ -89,5 +122,6 @@ export default {
 }
 .equal {
   background-color: rgb(50, 125, 155);
+  grid-column: 3/-1;
 }
 </style>
