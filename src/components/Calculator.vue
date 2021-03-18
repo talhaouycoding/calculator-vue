@@ -28,10 +28,10 @@ export default {
   name: "Calculator",
   data() {
     return {
-      result: '',
-      operator: '',
-      firstNumber: '',
-      secondNumber: '',
+      result: "",
+      operator: "",
+      firstNumber: "",
+      secondNumber: "",
       operators: ["+", "-", "/", "%", "x"],
     };
   },
@@ -68,6 +68,11 @@ export default {
         case "%":
           this.result = +this.firstNumber % +this.secondNumber;
           break;
+          default:
+          this.result = +this.firstNumber;
+          break;
+
+
       }
     },
     comma() {
@@ -94,6 +99,7 @@ export default {
   grid-template-columns: repeat(4, 80px);
   grid-template-rows: repeat(6, 80px);
   border-radius: 20px;
+  box-shadow: -3px 6px 10px rgba(34, 39, 41, 0.5);
 }
 .btn {
   display: flex;
@@ -121,7 +127,8 @@ export default {
   border-top-left-radius: 20px;
 }
 .equal {
-  background-color: rgb(50, 125, 155);
+  background-color: rgb(94, 150, 172);
   grid-column: 3/-1;
+    border-radius: 5px;
 }
 </style>
